@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  go:
+    build: ./assets/${DOCKERC_PROJECT_GO}
+    working_dir: /go/src/${DOCKERC_PROJECT_PATH}
+    volumes:
+      - ./:/go/src/${DOCKERC_PROJECT_PATH}
+    command: air -d -c ./assets.air.toml
