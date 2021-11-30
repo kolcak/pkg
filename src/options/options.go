@@ -21,6 +21,7 @@ type O struct {
 	template interface{}
 	reader   *viper.Viper
 	loaded   bool
+	search   []string
 	file     string
 	prefix   string
 }
@@ -29,6 +30,11 @@ func New() *O {
 	return &O{
 		reader: viper.New(),
 	}
+}
+
+func (o *O) WithFileSearch(search []string) *O {
+	o.search = search
+	return o
 }
 
 func (o *O) WithFile(file string) *O {
@@ -77,6 +83,27 @@ func (o *O) withFile(template interface{}) error {
 	return nil
 }
 
+func (o *O) withFileSearch(template interface{}) error {
+	if len(o.search) > 0 {
+		o.reader.SetConfigType("yml")
+		o.reader.SetConfigName("config")
+		Log.Debugf("withFileScan: `%+v`", o.search)
+
+		for _, f := range o.search {
+			o.reader.AddConfigPath(f)
+		}
+
+		if err := o.reader.ReadInConfig(); err != nil {
+			Log.Warningf("withFileScan: `%+v`", err)
+		} else {
+			if err := o.reader.Unmarshal(template); err != nil {
+				return fmt.Errorf("withFile: Unable to decode into struct, error: %+v", err)
+			}
+		}
+	}
+	return nil
+}
+
 func (o *O) withEnv() {
 	if o.prefix != "" {
 		Log.Debugf("with env prefix: %s", o.prefix)
@@ -105,11 +132,13 @@ func (o *O) Load(template Options) error {
 type Logger interface {
 	Infof(format string, args ...interface{})
 	Debugf(format string, args ...interface{})
+	Warningf(format string, args ...interface{})
 }
 
 type l struct{}
 
-func (l) Infof(format string, args ...interface{})  {}
-func (l) Debugf(format string, args ...interface{}) {}
+func (l) Infof(format string, args ...interface{})    {}
+func (l) Debugf(format string, args ...interface{})   {}
+func (l) Warningf(format string, args ...interface{}) {}
 
 var Log Logger = new(l)
