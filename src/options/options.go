@@ -79,6 +79,8 @@ func (o *O) withFile(template interface{}) error {
 				return fmt.Errorf("withFile: Unable to decode into struct, error: %+v", err)
 			}
 		}
+	} else {
+		return o.withFileSearch(template)
 	}
 	return nil
 }
