@@ -1,4 +1,4 @@
-module github.com/kolcak/pkg
+module github.com/kolcak/pkg/src/options
 
 go 1.17
 
