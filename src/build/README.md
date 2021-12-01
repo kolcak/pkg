@@ -7,7 +7,8 @@ go get github.com/kolcak/pkg/src/build
 #### Use
 
 ```bash
-go run -ldflags "-w -s -X build.xProject=project -X build.xVersion=`date +"v%Y.%m%d.%H%M%S"` -X build.xRevision=`date +"v%Y.%m%d.%H%M%S"` -X build.xRelease=`date -u +%s` -X build.xEnv=IWM" main.go
+# OR BUILD
+go run -ldflags "-w -s -X github.com/kolcak/pkg/src/build.xProject=project -X github.com/kolcak/pkg/src/build.xVersion=`date +"v%Y.%m%d.%H%M%S"` -X github.com/kolcak/pkg/src/build.xRevision=`date +"v%Y.%m%d.%H%M%S"` -X github.com/kolcak/pkg/src/build.xRelease=`date -u +%s` -X github.com/kolcak/pkg/src/build.xEnv=IWM" main.go
 ```
 
 ```go
